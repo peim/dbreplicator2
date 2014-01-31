@@ -224,8 +224,9 @@ public final class QueryConstructors {
     public static String constructSelectQuery(String tableName, List<String> colsList,
             List<String> whereList, List<String> orderByList) {
         StringBuffer query = new StringBuffer(constructSelectQuery(tableName, colsList));
-        if(whereList != null)
+        if(whereList != null) {
             query.append(WHERE).append(listToString(whereList, AND, "=?"));
+        }
         
         query.append(ORDER_BY).append(listToString(orderByList, ", "));
 
