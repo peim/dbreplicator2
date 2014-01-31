@@ -242,35 +242,6 @@ public class GenericAlgorithm implements Strategy {
                         try {
                             replicateUpdation(table, sourceResult);
                             getWorkPoolService().clearWorkPoolData(operationsResult);
-<<<<<<< HEAD
-                            getCount().addSuccess(table.getName());
-                        } else {
-                            try {
-                                // и если такой записи нет, то пытаемся вставить
-                                replicateInsertion(table, sourceResult);
-                                getCount().addSuccess(table.getName());
-                                
-                                getWorkPoolService().clearWorkPoolData(operationsResult);
-                            } catch (SQLException e) {
-                                // Поглощаем и логгируем ошибки вставки
-                                getCount().addError(table.getName());
-                                // Это ожидаемый результат
-                                String rowDump = String.format("[ tableName = %s  [ operation = %s  [ row = %s ] ] ]", 
-                                        table, getWorkPoolService().getOperation(operationsResult), 
-                                        Jdbc.resultSetToString(sourceResult, 
-                                                new ArrayList<String>(getSourceDataService().getAllCols(table))));
-                                if (LOG.isDebugEnabled()) {
-                                    LOG.debug(String.format("Раннер [id_runner = %s, %s] Стратегия [id = %s]: Поглощена ошибка при вставке записи: ", 
-                                            data.getRunner().getId(), data.getRunner().getDescription(), data.getId()) + rowDump, e);
-                                } else {
-                                    LOG.warn(String.format("Раннер [id_runner = %s, %s] Стратегия [id = %s]: Поглощена ошибка при вставке записи: ", 
-                                            data.getRunner().getId(), data.getRunner().getDescription(), data.getId()) + rowDump + " " + e.getMessage());
-                                }
-                                getWorkPoolService().trackError(String.format("Раннер [id_runner = %s, %s] Стратегия [id = %s]: Ошибка при вставке записи: ", 
-                                        data.getRunner().getId(), data.getRunner().getDescription(), data.getId()) + rowDump, e, operationsResult);
-
-                                return false;
-=======
                             getCount().addSuccess(getWorkPoolService().getTable(operationsResult));
                             
                             return true;
@@ -288,7 +259,6 @@ public class GenericAlgorithm implements Strategy {
                                 LOG.debug(message, e);
                             } else {
                                 LOG.warn(message + " \n" + e.getMessage());
->>>>>>> ac1034d6decb92d7efd8166ef57240043ad1cf07
                             }
                             getWorkPoolService().trackError(message, e, operationsResult);
                             getCount().addError(getWorkPoolService().getTable(operationsResult));
