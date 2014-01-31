@@ -53,6 +53,8 @@ public class IntegrityReplicatedData extends StrategySkeleton implements Strateg
     private static final String PART_EMAIL = "partEmail";
     private static final String TABLES = "tables";
     private static final String LOG_PART_TABLES = "logPartTables";
+    private static final String FETCH_SIZE = "fetchSize";
+    
     /**
      * Конструктор по умолчанию
      */
@@ -102,7 +104,6 @@ public class IntegrityReplicatedData extends StrategySkeleton implements Strateg
                 GenericDataService dataServiceSource = new GenericDataService(sourceConnection);
                 GenericDataService dataServiceTarget = new GenericDataService(targetConnection);) {
 
-            
             String tables = null;
             if(data.getParam(TABLES)!=null) {
                 tables = data.getParam(TABLES);
@@ -110,6 +111,10 @@ public class IntegrityReplicatedData extends StrategySkeleton implements Strateg
                 throw new StrategyException(new Exception("Не указаны таблицы, проверьте настройки!!!"));
             }
             
+            int fetchSize = 1000;
+            if (data.getParam(FETCH_SIZE) != null) {
+                fetchSize = Integer.parseInt(data.getParam(FETCH_SIZE));
+            }
             
             int partEmail = 10;
             if(data.getParam(PART_EMAIL)!=null) {
@@ -137,7 +142,7 @@ public class IntegrityReplicatedData extends StrategySkeleton implements Strateg
                 PreparedStatement selectTargetStatement = dataServiceTarget.getSelectStatement(table);
                 Map<String, Integer> colmSourcePri = new HashMap<String, Integer>(dataServiceSource.getPriColsTypes(table));
                 Map<String, Integer> colsSource = new HashMap<String, Integer>(dataServiceSource.getAllColsTypes(table));
-  
+                selectSourceStatement.setFetchSize(fetchSize);
                 try (ResultSet sourceResult = selectSourceStatement.executeQuery();) {
                     while(sourceResult.next()) {
                         

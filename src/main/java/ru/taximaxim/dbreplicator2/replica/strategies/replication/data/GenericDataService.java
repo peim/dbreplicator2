@@ -25,6 +25,7 @@ package ru.taximaxim.dbreplicator2.replica.strategies.replication.data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,8 +146,8 @@ public class GenericDataService extends DataServiceSkeleton implements DataServi
         if (statement == null) {
             statement = getConnection().prepareStatement(QueryConstructors
                     .constructSelectQuery(table.getName(),
-                            new ArrayList<String>(getAllCols(table)),
-                                    new ArrayList<String>(getPriCols(table))));
+                    new ArrayList<String>(getAllCols(table)),
+                    new ArrayList<String>(getPriCols(table))));
 
             getSelectStatements().put(table, statement);
         }
@@ -164,7 +165,8 @@ public class GenericDataService extends DataServiceSkeleton implements DataServi
             statement = getConnection().prepareStatement(QueryConstructors.
                 constructSelectQuery(table.getName(),
                 new ArrayList<String>(getAllCols(table)), null, 
-                new ArrayList<String>(getPriCols(table))));
+                new ArrayList<String>(getPriCols(table))),
+                ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
             getSelectStatementsAll().put(table, statement);
         }
         return statement;
@@ -179,8 +181,8 @@ public class GenericDataService extends DataServiceSkeleton implements DataServi
         if (statement == null) {
             statement = getConnection().prepareStatement(QueryConstructors
                     .constructUpdateQuery(table.getName(),
-                            new ArrayList<String>(getDataCols(table)),
-                                    new ArrayList<String>(getPriCols(table))));
+                    new ArrayList<String>(getDataCols(table)),
+                    new ArrayList<String>(getPriCols(table))));
 
             getUpdateStatements().put(table, statement);
         }
