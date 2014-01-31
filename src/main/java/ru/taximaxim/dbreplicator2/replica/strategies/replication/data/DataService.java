@@ -62,6 +62,15 @@ public interface DataService {
             throws SQLException;
 
     /**
+     * Инициализация с кешированием подготовленного запроса для извлечения
+     * записи из источника
+     * 
+     * @return the selectSourceStatements
+     * @throws SQLException
+     */
+    PreparedStatement getSelectStatementAll(TableModel table) throws SQLException;
+
+    /**
      * Инициализация с кешированием подготовленного запроса обновления записи в
      * приемнике
      * 

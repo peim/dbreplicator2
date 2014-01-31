@@ -122,3 +122,10 @@ insert into ignore_columns_table (id_ignore_columns_table, id_table, column_name
 insert into ignore_columns_table (id_ignore_columns_table, id_table, column_name) values (11, 11, '_STRING');
 insert into ignore_columns_table (id_ignore_columns_table, id_table, column_name) values (12, 12, '_STRING');
 insert into ignore_columns_table (id_ignore_columns_table, id_table, column_name) values (13, 13, '_STRING');
+
+--Runner IntegrityReplicatedData
+insert into runners (id_runner, source, target, description, class_name) values (15, 'source', 'dest', 'ErrorsIntegrityReplicatedData', '');
+--Strategy  IntegrityReplicatedData
+insert into strategies (id, className, param, isEnabled, priority, id_runner) values (15, 'ru.taximaxim.dbreplicator2.replica.strategies.errors.IntegrityReplicatedData', 'partEmail=10
+logPartTables=true
+tables=T_TABLE2,T_TABLE3,t_table1', true, 100, 15);

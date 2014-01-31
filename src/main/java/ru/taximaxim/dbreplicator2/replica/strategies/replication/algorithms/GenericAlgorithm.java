@@ -277,7 +277,7 @@ public class GenericAlgorithm implements Strategy {
                                 String rowDump = String.format("[ tableName = %s  [ operation = %s  [ row = %s ] ] ]", 
                                         table, getWorkPoolService().getOperation(operationsResult), 
                                         Jdbc.resultSetToString(sourceResult, 
-                                                new ArrayList<String>(sourceDataService.getAllCols(table))));
+                                                new ArrayList<String>(getSourceDataService().getAllCols(table))));
                                 if (LOG.isDebugEnabled()) {
                                     LOG.debug(String.format("Раннер [id_runner = %s, %s] Стратегия [id = %s]: Поглощена ошибка при вставке записи: ", 
                                             data.getRunner().getId(), data.getRunner().getDescription(), data.getId()) + rowDump, e);
