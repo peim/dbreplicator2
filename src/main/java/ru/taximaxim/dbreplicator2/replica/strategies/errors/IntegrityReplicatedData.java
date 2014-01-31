@@ -160,7 +160,7 @@ public class IntegrityReplicatedData extends StrategySkeleton implements Strateg
                                     if(!JdbcMetadata.isEquals(sourceResult, targetResult, colsName, 
                                             colsSource.get(colsName))) {
                                         String rowDump = String.format(
-                                                "[ col %s => [%s != %s] ]",
+                                                "[ col %s => [%s != %s] ] ",
                                                 colsName,
                                                 sourceResult.getObject(colsName),
                                                 targetResult.getObject(colsName));
