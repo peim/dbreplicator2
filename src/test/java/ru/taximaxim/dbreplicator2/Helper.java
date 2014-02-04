@@ -319,7 +319,7 @@ public class Helper {
         while (rsSource.next()) {
             String text = "";
             for (int i = 1; i <= totalColumnSource; i++) {
-                text += rsSource.getObject(i).toString() + "\t";
+                text += rsSource.getObject(i) + "\t";
             }
             LOG.info(text);
             LOG.info("================================================================");

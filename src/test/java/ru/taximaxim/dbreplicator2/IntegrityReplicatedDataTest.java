@@ -99,20 +99,23 @@ public class IntegrityReplicatedDataTest {
     public void testInsert() throws SQLException, ClassNotFoundException, IOException, InterruptedException {
       //Проверка вставки
         Helper.executeSqlFromFile(conn, "sql_insert.sql");
-        Helper.executeSqlFromFile(conn, "sql_insert.sql");
-        Helper.executeSqlFromFile(conn, "sql_insert.sql");
         worker.run();
         Thread.sleep(REPLICATION_DELAY);
         List<MyTablesType> listSource = Helper.InfoTest(conn, "t_table");
         List<MyTablesType> listDest   = Helper.InfoTest(connDest, "t_table");
         Helper.AssertEquals(listSource, listDest);
-        
+
         listSource = Helper.InfoTest(conn, "t_table1");
         listDest   = Helper.InfoTest(connDest, "t_table1");
         Helper.AssertEquals(listSource, listDest);
         Thread.sleep(REPLICATION_DELAY);
         Helper.executeSqlFromFile(connDest, "sql_insert.sql"); 
         Helper.executeSqlFromFile(connDest, "sql_update.sql"); 
+        
+        int count_rep2_workpool_data = Helper.InfoCount(conn, "rep2_workpool_data");
+        LOG.error("Таблица rep2_workpool_data должна быть пустой: count = " + count_rep2_workpool_data);
+        Helper.InfoSelect(conn, "rep2_workpool_data");
+        
         errorsIntegrityReplicatedData.run();
     }
     
