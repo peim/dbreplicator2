@@ -25,6 +25,9 @@ insert into tables (id_table, id_pool, name) values (10, 'dest', 'T_TABLE2');
 insert into tables (id_table, id_pool, name) values (11, 'dest', 'T_TABLE3');
 insert into tables (id_table, id_pool, name) values (12, 'dest', 'T_TABLE4');
 insert into tables (id_table, id_pool, name) values (13, 'dest', 'T_TABLE5');
+insert into tables (id_table, id_pool, name) values (14, 'source', 'T_TABLE6');
+insert into tables (id_table, id_pool, name) values (15, 'source', 'T_TABLE7');
+insert into tables (id_table, id_pool, name) values (16, 'source', 'T_TABLE8');
 
 --Runners Super Log
 insert into runners (id_runner, source, target, description, class_name) values (1, 'source', 'source', 'description', 'ru.taximaxim.dbreplicator2.replica.SuperlogRunner');
@@ -86,6 +89,9 @@ insert into runners (id_runner, source, target, description, class_name) values 
 insert into strategies (id, className, param, isEnabled, priority, id_runner) values (9, 'ru.taximaxim.dbreplicator2.replica.strategies.replication.Generic', null, true, 100, 9);
 
 -------
+--Runner null
+insert into runners (id_runner, source, target, description, class_name) values (25, 'source', 'dest', 'Null', '');
+-------
 
 --Runner tables
 insert into table_observers (id_runner, id_table) values (3, 1);
@@ -100,6 +106,9 @@ insert into table_observers (id_runner, id_table) values (9, 10);
 insert into table_observers (id_runner, id_table) values (9, 11);
 insert into table_observers (id_runner, id_table) values (9, 12);
 insert into table_observers (id_runner, id_table) values (9, 13);
+insert into table_observers (id_runner, id_table) values (25, 14);
+insert into table_observers (id_runner, id_table) values (25, 15);
+insert into table_observers (id_runner, id_table) values (25, 16);
 
 --Runner CountWatchgdog
 insert into runners (id_runner, source, target, description, class_name) values (7, 'source', 'source', 'ErrorsCountWatchgdogStrategy', '');
@@ -127,5 +136,4 @@ insert into ignore_columns_table (id_ignore_columns_table, id_table, column_name
 insert into runners (id_runner, source, target, description, class_name) values (15, 'source', 'dest', 'ErrorsIntegrityReplicatedData', '');
 --Strategy  IntegrityReplicatedData
 insert into strategies (id, className, param, isEnabled, priority, id_runner) values (15, 'ru.taximaxim.dbreplicator2.replica.strategies.errors.IntegrityReplicatedData', 'partEmail=10
-logPartTables=true
-tables=T_TABLE2,T_TABLE3,t_table1', true, 100, 15);
+idRunner=25', true, 100, 15);

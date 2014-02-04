@@ -25,7 +25,6 @@ package ru.taximaxim.dbreplicator2.replica.strategies.replication.data;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,19 +58,12 @@ public class GenericDataService extends DataServiceSkeleton implements DataServi
      * Кешировнные запросы вставки данных в приемник
      */
     private Map<TableModel, PreparedStatement> insertStatements = new HashMap<TableModel, PreparedStatement>();
-    /**
-     * Кешированные запросы получения данных из источника и приемника
-     */
-    private Map<TableModel, PreparedStatement> selectStatementsAll = new HashMap<TableModel, PreparedStatement>();
-
+    
     private Map<TableModel, Set<String>> priCols = new HashMap<TableModel, Set<String>>();
     private Map<TableModel, Set<String>> allCols = new HashMap<TableModel, Set<String>>();
     private Map<TableModel, Set<String>> dataCols = new HashMap<TableModel, Set<String>>();
     private Map<TableModel, Set<String>> identityCols = new HashMap<TableModel, Set<String>>();
     private Map<TableModel, Set<String>> ignoredCols = new HashMap<TableModel, Set<String>>();
-    
-    private Map<TableModel, Map<String, Integer>> allColsTypes = new HashMap<TableModel, Map<String, Integer>>();
-    private Map<TableModel, Map<String, Integer>> priColsTypes = new HashMap<TableModel, Map<String, Integer>>();
     
     /**
      * 
@@ -128,15 +120,6 @@ public class GenericDataService extends DataServiceSkeleton implements DataServi
         return insertStatements;
     }
     
-    /**
-     * Получение кеша запросов на выборку данных из источника и приемника
-     * 
-     * @return the selectStatements
-     */
-    protected Map<TableModel, PreparedStatement> getSelectStatementsAll() {
-        return selectStatementsAll;
-    }
-    
     /* (non-Javadoc)
      * @see ru.taximaxim.dbreplicator2.replica.DataService2#getSelectStatement(ru.taximaxim.dbreplicator2.model.TableModel)
      */
@@ -152,23 +135,6 @@ public class GenericDataService extends DataServiceSkeleton implements DataServi
             getSelectStatements().put(table, statement);
         }
 
-        return statement;
-    }
-    
-    /* (non-Javadoc)
-     * @see ru.taximaxim.dbreplicator2.replica.DataService2#getSelectStatementAll(ru.taximaxim.dbreplicator2.model.TableModel)
-     */
-    @Override
-    public PreparedStatement getSelectStatementAll(TableModel table) throws SQLException {
-        PreparedStatement statement = getSelectStatementsAll().get(table);
-        if (statement == null) {
-            statement = getConnection().prepareStatement(QueryConstructors.
-                constructSelectQuery(table.getName(),
-                new ArrayList<String>(getAllCols(table)), null, 
-                new ArrayList<String>(getPriCols(table))),
-                ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            getSelectStatementsAll().put(table, statement);
-        }
         return statement;
     }
     
@@ -250,50 +216,7 @@ public class GenericDataService extends DataServiceSkeleton implements DataServi
 
         return cols;
     }
-
-    /**
-     * Кешированное получение списка всех колонок
-     * 
-     * @param connection
-     * @param table.getName()
-     * @return
-     * @throws SQLException
-     */
-    public Map<String, Integer> getAllColsTypes(TableModel table)
-            throws SQLException {
-        Map<String, Integer> colsTypes = allColsTypes.get(table);
-        if (colsTypes == null) {
-            colsTypes = JdbcMetadata.getColumnsTypes(getConnection(), table.getName());
-            
-            // Удаляем игнорируемые колонки
-            for (String ignoredCol: getIgnoredCols(table)) {
-                colsTypes.remove(ignoredCol.toUpperCase());
-            }
-            
-            allColsTypes.put(table, colsTypes);
-        }
-
-        return colsTypes;
-    }
     
-    /**
-     * Кешированное получение списка ключевых колонок
-     * 
-     * @param connection
-     * @param table.getName()
-     * @return
-     * @throws SQLException
-     */
-    public Map<String, Integer> getPriColsTypes(TableModel table)
-            throws SQLException {
-        Map<String, Integer> colsTypes = priColsTypes.get(table);
-        if (colsTypes == null) {
-            colsTypes = JdbcMetadata.getPrimaryColumnsTypes(getConnection(), table.getName());
-            priColsTypes.put(table, colsTypes);
-        }
-
-        return colsTypes;
-    }
     /**
      * Кешированное получение списка колонок с данными
      * 
@@ -374,6 +297,5 @@ public class GenericDataService extends DataServiceSkeleton implements DataServi
         close(selectStatements);
         close(updateStatements);
         close(insertStatements);
-        close(selectStatementsAll);
     }
 }

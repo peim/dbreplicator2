@@ -190,9 +190,7 @@ public final class JdbcMetadata {
      * @return
      * @throws SQLException
      */
-    public static Map<String, Integer> getColumnsTypes(Connection connection,
-            String tableName)
-            throws SQLException {
+    public static Map<String, Integer> getColumnsTypes(Connection connection, String tableName) throws SQLException {
         Map<String, Integer> colsTypes = new HashMap<String, Integer>();
         DatabaseMetaData metaData = connection.getMetaData();
         
