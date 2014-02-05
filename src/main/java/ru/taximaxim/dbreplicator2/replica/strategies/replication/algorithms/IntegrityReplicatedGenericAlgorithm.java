@@ -63,7 +63,7 @@ public class IntegrityReplicatedGenericAlgorithm extends GenericAlgorithm implem
     public IntegrityReplicatedGenericAlgorithm(int fetchSize, int batchSize,
             boolean isStrict, WorkPoolService workPoolService,
             GenericDataTypeService sourceDataService, GenericDataTypeService destDataService) {
-        super(fetchSize, 1000, false, workPoolService, sourceDataService, destDataService);
+        super(fetchSize, batchSize,  isStrict, workPoolService, sourceDataService, destDataService);
         this.sourceDataService = sourceDataService;
         this.destDataService = destDataService;
     }
@@ -144,10 +144,8 @@ public class IntegrityReplicatedGenericAlgorithm extends GenericAlgorithm implem
      * @return
      */
     protected int getRunner(StrategyModel data) {
-        if (idRunner==null) {
-            if(data.getParam(ID_RUNNER)!=null) {
-                idRunner = Integer.parseInt(data.getParam(ID_RUNNER));
-            }
+        if ((idRunner==null) & (data.getParam(ID_RUNNER)!=null)) {
+            idRunner = Integer.parseInt(data.getParam(ID_RUNNER));
         }
         return idRunner;
     }
