@@ -32,13 +32,13 @@ insert into tables (id_table, id_pool, name) values (16, 'source', 'T_TABLE8');
 --Runners Super Log
 insert into runners (id_runner, source, target, description, class_name) values (1, 'source', 'source', 'description', 'ru.taximaxim.dbreplicator2.replica.SuperlogRunner');
 --Strategies Add Super Log
-insert into strategies (id, className, param, isEnabled, priority, id_runner) values (1, 'ru.taximaxim.dbreplicator2.replica.strategies.superlog.FastManager', 'key1=value1
+insert into strategies (id, className, param, isEnabled, priority, id_runner) values (1, 'ru.taximaxim.dbreplicator2.replica.strategies.superlog.Manager', 'key1=value1
 key2=''value2''', true, 100, 1);
 
 --Runners Super Log 2
 insert into runners (id_runner, source, target, description, class_name) values (2, 'dest', 'dest', 'description', 'ru.taximaxim.dbreplicator2.replica.SuperlogRunner');
 --Strategies Add Super Log 2
-insert into strategies (id, className, param, isEnabled, priority, id_runner) values (2, 'ru.taximaxim.dbreplicator2.replica.strategies.superlog.FastManager', 'key1=value1
+insert into strategies (id, className, param, isEnabled, priority, id_runner) values (2, 'ru.taximaxim.dbreplicator2.replica.strategies.superlog.Manager', 'key1=value1
 key2=''value2''', true, 100, 2);
 
 
@@ -94,9 +94,12 @@ insert into runners (id_runner, source, target, description, class_name) values 
 -------
 
 --Runner tables
+--insert into table_observers (id_runner, id_table) values (25, 1);
 insert into table_observers (id_runner, id_table) values (25, 2);
 insert into table_observers (id_runner, id_table) values (25, 3);
 insert into table_observers (id_runner, id_table) values (25, 4);
+insert into table_observers (id_runner, id_table) values (25, 5);
+insert into table_observers (id_runner, id_table) values (25, 6);
 insert into table_observers (id_runner, id_table) values (3, 1);
 insert into table_observers (id_runner, id_table) values (4, 2);
 insert into table_observers (id_runner, id_table) values (5, 6);

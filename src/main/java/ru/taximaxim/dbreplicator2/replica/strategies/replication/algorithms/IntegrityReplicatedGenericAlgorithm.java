@@ -267,6 +267,8 @@ public class IntegrityReplicatedGenericAlgorithm extends GenericAlgorithm implem
                                 LOG.error(createInfoLog(rowDumpEmail, getPartEmail(data)));
                                 rowDumpEmail = getStringBuffer(data);
                             }
+                        } else {
+                            getWorkPoolService().clearWorkPoolData(operationsResult);
                         }
                     } else {
                         String rowDump = String.format(
