@@ -116,9 +116,9 @@ insert into table_observers (id_runner, id_table) values (9, 10);
 insert into table_observers (id_runner, id_table) values (9, 11);
 insert into table_observers (id_runner, id_table) values (9, 12);
 insert into table_observers (id_runner, id_table) values (9, 13);
---insert into table_observers (id_runner, id_table) values (25, 14);
---insert into table_observers (id_runner, id_table) values (25, 15);
---insert into table_observers (id_runner, id_table) values (25, 16);
+insert into table_observers (id_runner, id_table) values (25, 14);
+insert into table_observers (id_runner, id_table) values (25, 15);
+insert into table_observers (id_runner, id_table) values (25, 16);
 
 --Runner CountWatchgdog
 insert into runners (id_runner, source, target, description, class_name) values (7, 'source', 'source', 'ErrorsCountWatchgdogStrategy', '');
