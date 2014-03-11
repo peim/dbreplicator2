@@ -227,34 +227,6 @@ public final class JdbcMetadata {
     }
     
     /**
-     * Проверка на null
-     * @param result
-     * @param colsName
-     * @return
-     * @throws SQLException
-     */
-    public static boolean isNull(ResultSet result, String colsName) throws SQLException {
-        return result.getObject(colsName) == null;
-    }
-    
-    /**
-     * Проверка на null и сравнивание
-     * @param sourceResult
-     * @param targetResult
-     * @param colsName
-     * @return
-     * @throws SQLException
-     */
-    public static int checkNull(ResultSet sourceResult, ResultSet targetResult, String colsName) throws SQLException{
-        if (isNull(sourceResult, colsName) != isNull(targetResult, colsName)) {
-            return -1;
-        } else if (isNull(sourceResult, colsName) & isNull(targetResult, colsName)) {
-            return 1;
-        }
-        return 0;
-    }
-    
-    /**
      * Проверка isEquals(ResultSet,ResultSet)
      * @param sourceResult
      * @param targetResult
@@ -264,15 +236,16 @@ public final class JdbcMetadata {
      * @throws SQLException
      */
     public static boolean isEquals(ResultSet sourceResult, ResultSet targetResult, String colsName, Integer sqlType) throws SQLException {
-        
-       int nullObject = checkNull(sourceResult, targetResult, colsName);
-       if(nullObject == -1) {
+      
+       boolean sourceBoolean = sourceResult.getObject(colsName) == null;
+       boolean targetBoolean = targetResult.getObject(colsName) == null;
+       if (sourceBoolean != targetBoolean) {
            return false;
-       } else if(nullObject == 1) {
+       } else if (sourceBoolean & targetBoolean) {
            return true;
-       }
+       } else {
        
-        switch (sqlType) {
+         switch (sqlType) {
             case Types.SMALLINT:
                 return sourceResult.getShort(colsName) == targetResult.getShort(colsName);
             case Types.INTEGER:
@@ -314,6 +287,7 @@ public final class JdbcMetadata {
                 return sourceResult.getTimestamp(colsName).getTime() == targetResult.getTimestamp(colsName).getTime();
             default:
                 return sourceResult.getObject(colsName).equals(targetResult.getObject(colsName));
+          }
       }
     } 
     
