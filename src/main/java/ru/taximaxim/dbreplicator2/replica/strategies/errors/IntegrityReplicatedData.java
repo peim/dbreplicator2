@@ -28,6 +28,7 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
+import ru.taximaxim.dbreplicator2.el.ErrorsLog;
 import ru.taximaxim.dbreplicator2.model.StrategyModel;
 import ru.taximaxim.dbreplicator2.replica.Strategy;
 import ru.taximaxim.dbreplicator2.replica.StrategyException;
@@ -35,6 +36,7 @@ import ru.taximaxim.dbreplicator2.replica.strategies.replication.StrategySkeleto
 import ru.taximaxim.dbreplicator2.replica.strategies.replication.algorithms.IntegrityReplicatedGenericAlgorithm;
 import ru.taximaxim.dbreplicator2.replica.strategies.replication.data.GenericDataTypeService;
 import ru.taximaxim.dbreplicator2.replica.strategies.replication.workpool.GenericWorkPoolService;
+import ru.taximaxim.dbreplicator2.utils.Core;
 
 /**
  * @author mardanov_rm
@@ -52,7 +54,8 @@ public class IntegrityReplicatedData extends StrategySkeleton implements Strateg
     public void execute(Connection sourceConnection, Connection targetConnection, StrategyModel data) 
             throws StrategyException, SQLException, ClassNotFoundException {
         
-        try (GenericWorkPoolService genericWorkPoolService = new GenericWorkPoolService(sourceConnection);
+        try (ErrorsLog errorsLog = Core.getErrorsLog();
+                GenericWorkPoolService genericWorkPoolService = new GenericWorkPoolService(sourceConnection, errorsLog);
                 GenericDataTypeService genericDataServiceSourceConnection = new GenericDataTypeService(sourceConnection);
                 GenericDataTypeService genericDataServiceTargetConnection = new GenericDataTypeService(targetConnection);) {
             IntegrityReplicatedGenericAlgorithm strategy = new IntegrityReplicatedGenericAlgorithm(getFetchSize(data), 

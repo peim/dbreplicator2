@@ -89,7 +89,7 @@ public class FastManager implements Strategy {
                 // Строим список обработчиков реплик
 
                 // Переносим данные
-                try (PreparedStatement insertRunnerData = targetConnection.prepareStatement("INSERT INTO rep2_workpool_data (id_runner, id_superlog, id_foreign, id_table, c_operation, c_date, id_transaction, c_errors_count) VALUES (?, ?, ?, ?, ?, ?, ?, 0)");
+                try (PreparedStatement insertRunnerData = targetConnection.prepareStatement("INSERT INTO rep2_workpool_data (id_runner, id_superlog, id_foreign, id_table, c_operation, c_date, id_transaction) VALUES (?, ?, ?, ?, ?, ?, ?)");
                      PreparedStatement deleteSuperLog = targetConnection.prepareStatement("DELETE FROM rep2_superlog WHERE id_superlog=?");
                      PreparedStatement selectSuperLog = sourceConnection.prepareStatement("SELECT * FROM rep2_superlog ORDER BY id_superlog");) {
                     selectSuperLog.setFetchSize(fetchSize);
@@ -127,20 +127,18 @@ public class FastManager implements Strategy {
                                             insertRunnerData.setTimestamp(6, superLogResult.getTimestamp(WorkPoolService.C_DATE));
                                             insertRunnerData.setString(7, superLogResult .getString(WorkPoolService.ID_TRANSACTION));
                                             insertRunnerData.addBatch();
-    
                                             // Выводим данные из rep2_superlog_table
                                             if (LOG.isDebugEnabled()) {
                                                 LOG.debug("INSERT");
                                             }
                                         }
+                                        // Удаляем исходную запись
+                                        deleteSuperLog.setLong(1, superLogResult.getLong(WorkPoolService.ID_SUPERLOG));
+                                        deleteSuperLog.addBatch();
                                     }
                                 }
 
                             }
-                            // Удаляем исходную запись
-                            deleteSuperLog.setLong(1,
-                                    superLogResult.getLong(WorkPoolService.ID_SUPERLOG));
-                            deleteSuperLog.addBatch();
 
                             // Периодически сбрасываем батч в БД
                             if ((rowsCount % batchSize) == 0) {

@@ -5,11 +5,15 @@
 insert into bone_cp_settings (id_pool, driver, url, user, pass, min_connections_per_partition, max_connections_per_partition, partition_count, connection_timeout_in_ms, close_connection_watch_timeout_in_ms ) values ('source', 'org.h2.Driver', 'jdbc:h2:mem://localhost/~/source', 'sa', '', 1, 100, 1, 10000, 0);
 --Connection dest
 insert into bone_cp_settings (id_pool, driver, url, user, pass, min_connections_per_partition, max_connections_per_partition, partition_count, connection_timeout_in_ms, close_connection_watch_timeout_in_ms ) values ('dest', 'org.h2.Driver', 'jdbc:h2:mem://localhost/~/dest', 'sa', '', 1, 100, 1, 10000, 0);
-
+--Connection stats
+insert into bone_cp_settings (id_pool, driver, url, user, pass, min_connections_per_partition, max_connections_per_partition, partition_count, connection_timeout_in_ms, close_connection_watch_timeout_in_ms ) values ('stats', 'org.h2.Driver', 'jdbc:h2:mem://localhost/~/source', 'sa', '', 1, 100, 1, 10000, 0);
+--Connection error
+insert into bone_cp_settings (id_pool, driver, url, user, pass, min_connections_per_partition, max_connections_per_partition, partition_count, connection_timeout_in_ms, close_connection_watch_timeout_in_ms ) values ('error', 'org.h2.Driver', 'jdbc:h2:mem://localhost/~/source', 'sa', '', 1, 100, 1, 10000, 0);
 
 --application_settings
 insert into application_settings (key, value) values ('tp.threads', '10');
-insert into application_settings (key, value) values ('stats.dest', 'source');
+insert into application_settings (key, value) values ('stats.dest', 'stats');
+insert into application_settings (key, value) values ('error.dest', 'error');
 
 
 --Tables
@@ -122,6 +126,19 @@ insert into runners (id_runner, source, target, description, class_name) values 
 insert into strategies (id, className, param, isEnabled, priority, id_runner) values (7, 'ru.taximaxim.dbreplicator2.replica.strategies.errors.CountWatchgdog', 'maxErrors=0
 partEmail=10', true, 100, 7);
 insert into strategies (id, className, param, isEnabled, priority, id_runner) values (10, 'ru.taximaxim.dbreplicator2.replica.strategies.errors.CountWatchgdog', null, true, 100, 7);
+
+
+
+
+
+
+
+
+--Runner SuperlogWatchgdog
+insert into runners (id_runner, source, target, description, class_name) values (15, 'source', 'source', 'ErrorsSuperlogWatchgdog', '');
+--Strategy  SuperlogWatchgdog
+insert into strategies (id, className, param, isEnabled, priority, id_runner) values (15, 'ru.taximaxim.dbreplicator2.replica.strategies.errors.SuperlogWatchgdog', 'period=1000
+partEmail=10', true, 100, 15);
 
 --Ignore Columns Table
 insert into ignore_columns_table (id_ignore_columns_table, id_table, column_name) values (1, 1, '_STRING');
